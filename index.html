@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bremcon</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #0f0f0f;
+      color: white;
+    }
+    .container {
+      max-width: 500px;
+      margin: auto;
+      padding: 20px;
+    }
+    .card {
+      background: #1a1a1a;
+      padding: 15px;
+      border-radius: 12px;
+      margin-bottom: 15px;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 8px;
+      border-radius: 8px;
+      border: none;
+    }
+    button {
+      background: #2e7dff;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .success {
+      color: #00e676;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Bremcon 👑</h2>
+
+    <div class="card">
+      <h3>Nova Venda</h3>
+      <input id="cliente" placeholder="Nome do cliente" />
+      <input id="valor" type="number" placeholder="Valor do contrato" />
+      <select id="tipo">
+        <option value="avista">Entrada à vista</option>
+        <option value="parcelado">Entrada parcelada</option>
+        <option value="linear">Linear</option>
+      </select>
+      <input id="parcelas" type="number" placeholder="Número de parcelas" />
+      <button onclick="calcular()">Calcular Comissão</button>
+    </div>
+
+    <div class="card">
+      <h3>Resultado</h3>
+      <p>Total Comissão: <span id="total"></span></p>
+      <p>Por Parcela: <span id="porParcela"></span></p>
+      <p class="success" id="status"></p>
+    </div>
+  </div>
+
+  <script>
+    const supabase = window.supabase.createClient(
+      "https://jvkiockkrrferjaxmumc.supabase.co",
+      "sb_publishable_LlOTC_ImzcH5KI2EZONo5A_IH1M2DSZ"
+    );
+
+    function calcular() {
+      const valor = parseFloat(document.getElementById("valor").value);
+      const tipo = document.getElementById("tipo").value;
+      const parcelas = parseInt(document.getElementById("parcelas").value);
+
+      if (!valor || !parcelas) {
+        alert("Preencha os campos corretamente.");
+        return;
+      }
+
+      const comissaoTotal = valor * 0.014;
+      document.getElementById("total").innerText =
+        "R$ " + comissaoTotal.toFixed(2);
+
+      if (tipo === "avista") {
+        document.getElementById("porParcela").innerText =
+          "Recebe total à vista";
+      } else {
+        const dividido = comissaoTotal / parcelas;
+        document.getElementById("porParcela").innerText =
+          "R$ " + dividido.toFixed(2) + " por parcela";
+      }
+
+      document.getElementById("status").innerText =
+        "Cálculo realizado com sucesso!";
+    }
+  </script>
+</body>
+</html>
