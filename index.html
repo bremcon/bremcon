@@ -2,9 +2,9 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Bremcon - Sistema de Comissões</title>
+<title>Bremcon - Comissões</title>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
 <style>
 
@@ -25,7 +25,6 @@ border-radius:10px;
 
 h1{
 text-align:center;
-margin-bottom:30px;
 }
 
 input,select{
@@ -34,33 +33,29 @@ padding:10px;
 margin-top:10px;
 margin-bottom:20px;
 border:none;
-border-radius:6px;
+border-radius:5px;
 }
 
 button{
 background:#00c853;
 border:none;
-padding:14px;
+padding:12px;
 width:100%;
 color:white;
 font-weight:bold;
 border-radius:6px;
 cursor:pointer;
-font-size:16px;
-}
-
-button:hover{
-background:#00a843;
 }
 
 </style>
+
 </head>
 
 <body>
 
 <div class="container">
 
-<h1>Bremcon - Registrar Venda</h1>
+<h1>Bremcon</h1>
 
 <label>Cliente</label>
 <input id="cliente">
@@ -76,7 +71,7 @@ background:#00a843;
 <option value="1000000">1.000.000</option>
 </select>
 
-<label>Valor do produto (R$)</label>
+<label>Valor do produto</label>
 <input id="valor" type="number">
 
 <label>Parcelas</label>
@@ -88,17 +83,17 @@ background:#00a843;
 
 <script>
 
-const supabase = window.supabase.createClient(
-'https://jvkiockkrrferjaxmumc.supabase.co',
-'sb_publishable_LlOTC_ImzcH5KI2EZONo5A_IH1M2DSZ'
-)
+const url = "https://jvkiockkrrferjaxmumc.supabase.co"
+const key = "sb_publishable_LlOTC_ImzcH5KI2EZONo5A_IH1M2DSZ"
+
+const supabase = window.supabase.createClient(url, key)
 
 async function salvarVenda(){
 
 let cliente = document.getElementById("cliente").value
 let pontos = document.getElementById("pontos").value
-let valor = parseFloat(document.getElementById("valor").value)
-let parcelas = parseInt(document.getElementById("parcelas").value)
+let valor = Number(document.getElementById("valor").value)
+let parcelas = Number(document.getElementById("parcelas").value)
 
 if(!cliente || !valor || !parcelas){
 alert("Preencha todos os campos")
@@ -106,11 +101,10 @@ return
 }
 
 let percentual = 1.4
-
 let comissao = (valor * percentual) / 100
 
-const { data, error } = await supabase
-.from('vendas')
+const { error } = await supabase
+.from("vendas")
 .insert([
 {
 cliente: cliente,
@@ -119,23 +113,15 @@ valor_produto: valor,
 percentual_comissao: percentual,
 valor_comissao_total: comissao,
 parcelas: parcelas,
-pagamento_confirmado:false
+pagamento_confirmado: false
 }
 ])
 
 if(error){
-
 console.log(error)
 alert("Erro ao salvar venda")
-
 }else{
-
 alert("Venda salva com sucesso")
-
-document.getElementById("cliente").value=""
-document.getElementById("valor").value=""
-document.getElementById("parcelas").value=""
-
 }
 
 }
