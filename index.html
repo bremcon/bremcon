@@ -1,43 +1,127 @@
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Sistema de Vendas</title>
+
+<style>
+body{
+    font-family: Arial;
+    background:#000;
+    color:#fff;
+    padding:30px;
+}
+
+.container{
+    max-width:500px;
+    margin:auto;
+}
+
+input, select, button{
+    width:100%;
+    padding:10px;
+    margin-top:10px;
+    border:none;
+    border-radius:5px;
+}
+
+input, select{
+    background:#111;
+    color:#0f0;
+}
+
+button{
+    background:#0f0;
+    color:#000;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+button:hover{
+    opacity:0.8;
+}
+
+.vendas{
+    margin-top:30px;
+}
+
+.venda{
+    background:#111;
+    padding:10px;
+    margin-top:10px;
+    border-left:5px solid #0f0;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Registrar Venda</h2>
+
+<input type="text" id="cliente" placeholder="Cliente">
+
+<input type="text" id="produto" placeholder="Produto">
+
+<input type="number" id="valor" placeholder="Valor do produto">
+
+<select id="parcelas">
+<option value="1">1x</option>
+<option value="2">2x</option>
+<option value="3">3x</option>
+<option value="4">4x</option>
+<option value="5">5x</option>
+<option value="6">6x</option>
+<option value="7">7x</option>
+<option value="8">8x</option>
+<option value="9">9x</option>
+<option value="10">10x</option>
+<option value="11">11x</option>
+<option value="12">12x</option>
+</select>
+
+<button onclick="salvarVenda()">Salvar venda</button>
+
+<div class="vendas" id="listaVendas"></div>
+
+</div>
 
 <script>
 
-const supabase = window.supabase.createClient(
-'https://jvkiockkrrferjaxmumc.supabase.co',
-'sb_publishable_LlOTC_ImzcH5KI2EZONo5A_IH1M2DSZ'
-)
-
-async function salvarVenda(){
+function salvarVenda(){
 
 let cliente = document.getElementById("cliente").value
-let pontos = document.getElementById("pontos").value
-let valor = parseFloat(document.getElementById("valor").value)
+let produto = document.getElementById("produto").value
+let valor = document.getElementById("valor").value
 let parcelas = document.getElementById("parcelas").value
 
-let percentual = 1.4
-let comissao = (valor * percentual) / 100
-
-const { data, error } = await supabase
-.from('vendas')
-.insert([
-{
-cliente: cliente,
-produto_pontos: pontos,
-valor_produto: valor,
-percentual_comissao: percentual,
-valor_comissao_total: comissao,
-parcelas: parcelas,
-pagamento_confirmado: false
+if(cliente === "" || produto === "" || valor === ""){
+alert("Preencha todos os campos")
+return
 }
-])
 
-if(error){
-alert("Erro ao salvar venda")
-console.log(error)
-}else{
-alert("Venda salva com sucesso")
-}
+let lista = document.getElementById("listaVendas")
+
+let venda = document.createElement("div")
+venda.className = "venda"
+
+venda.innerHTML = `
+<strong>Cliente:</strong> ${cliente} <br>
+<strong>Produto:</strong> ${produto} <br>
+<strong>Valor:</strong> R$ ${valor} <br>
+<strong>Parcelas:</strong> ${parcelas}x
+`
+
+lista.appendChild(venda)
+
+document.getElementById("cliente").value = ""
+document.getElementById("produto").value = ""
+document.getElementById("valor").value = ""
 
 }
 
 </script>
+
+</body>
+</html>
