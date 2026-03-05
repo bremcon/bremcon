@@ -59,9 +59,9 @@ text-align:center;
 
 <label>Produto (pontos)</label>
 <select id="pontos">
+<option value="75000">75000</option>
 <option value="150000">150000</option>
-<option value="250000">250000</option>
-<option value="350000">350000</option>
+<option value="300000">300000</option>
 <option value="450000">450000</option>
 <option value="600000">600000</option>
 <option value="750000">750000</option>
@@ -77,10 +77,11 @@ text-align:center;
 <button onclick="salvarVenda()">Salvar venda</button>
 
 </div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
 
-const supabase = supabase.createClient(
+const supabase = window.supabase.createClient(
 'https://jvkiockkrrferjaxmumc.supabase.co',
 'sb_publishable_LlOTC_ImzcH5KI2EZONo5A_IH1M2DSZ'
 )
@@ -88,7 +89,7 @@ const supabase = supabase.createClient(
 async function salvarVenda(){
 
 let cliente = document.getElementById("cliente").value
-let pontos = document.getElementById("pontos").value
+let pontos = document.getElementById("produto").value
 let valor = document.getElementById("valor").value
 let parcelas = document.getElementById("parcelas").value
 
