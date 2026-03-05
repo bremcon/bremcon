@@ -4,8 +4,6 @@
 <meta charset="UTF-8">
 <title>Bremcon - Comissões</title>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-
 <style>
 body{
 font-family:Arial;
@@ -90,8 +88,8 @@ const supabase = window.supabase.createClient(
 async function salvarVenda(){
 
 let cliente = document.getElementById("cliente").value
-let pontos = document.getElementById("produto").value
-let valor = document.getElementById("valor").value
+let pontos = document.getElementById("pontos").value
+let valor = parseFloat(document.getElementById("valor").value
 let parcelas = document.getElementById("parcelas").value
 
 let percentual = 1.4
