@@ -2,27 +2,28 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Bremcon</title>
+<title>Bremcon - Comissões</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
+
 body{
-font-family:Arial;
+font-family: Arial;
 background:#0a0a0a;
 color:white;
 padding:40px;
 }
 
 .container{
-max-width:500px;
+max-width:600px;
 margin:auto;
 background:#111;
 padding:30px;
 border-radius:10px;
 }
 
-input{
+input, select{
 width:100%;
 padding:10px;
 margin-top:10px;
@@ -41,52 +42,83 @@ font-weight:bold;
 border-radius:6px;
 cursor:pointer;
 }
-</style>
 
+h1{
+text-align:center;
+}
+
+</style>
 </head>
 
 <body>
 
 <div class="container">
 
-<h2>Bremcon</h2>
+<h1>Bremcon</h1>
 
-<input id="cliente" placeholder="Cliente">
-<input id="valor" placeholder="Valor">
+<label>Cliente</label>
+<input id="cliente" placeholder="Nome do cliente">
 
-<button onclick="salvar()">Salvar</button>
+<label>Produto (pontos)</label>
+<select id="pontos">
+<option value="75000">75000</option>
+<option value="150000">150000</option>
+<option value="300000">300000</option>
+<option value="450000">450000</option>
+<option value="600000">600000</option>
+<option value="750000">750000</option>
+<option value="1000000">1000000</option>
+</select>
+
+<label>Valor do produto</label>
+<input id="valor" type="number" placeholder="Ex: 30000">
+
+<label>Parcelas</label>
+<input id="parcelas" type="number" placeholder="Ex: 12">
+
+<button onclick="salvarVenda()">Salvar venda</button>
 
 </div>
 
 <script>
 
-const supabaseClient = supabase.createClient(
+const supabase = window.supabase.createClient(
 "https://jvkiockkrrferjaxmumc.supabase.co",
 "sb_publishable_LlOTC_ImzcH5KI2EZONo5A_IH1M2DSZ"
 )
 
-async function salvar(){
+async function salvarVenda(){
 
 let cliente = document.getElementById("cliente").value
-let valor = document.getElementById("valor").value
+let pontos = document.getElementById("pontos").value
+let valor = parseFloat(document.getElementById("valor").value)
+let parcelas = document.getElementById("parcelas").value
 
-const { error } = await supabaseClient
+let percentual = 1.4
+let comissao = (valor * percentual) / 100
+
+const { error } = await supabase
 .from("vendas")
 .insert([
 {
 cliente: cliente,
-valor_produto: valor
+produto_pontos: pontos,
+valor_produto: valor,
+percentual_comissao: percentual,
+valor_comissao_total: comissao,
+parcelas: parcelas,
+pagamento_confirmado: false
 }
 ])
 
 if(error){
 
+alert("Erro ao salvar venda")
 console.log(error)
-alert("Erro")
 
 }else{
 
-alert("Salvo no banco!")
+alert("Venda salva com sucesso!")
 
 }
 
