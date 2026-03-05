@@ -2,12 +2,11 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Bremcon - Comissões</title>
+<title>Bremcon</title>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-</script>
-  
+<style>
 body{
 font-family:Arial;
 background:#0a0a0a;
@@ -16,18 +15,14 @@ padding:40px;
 }
 
 .container{
-max-width:600px;
+max-width:500px;
 margin:auto;
 background:#111;
 padding:30px;
 border-radius:10px;
 }
 
-h1{
-text-align:center;
-}
-
-input,select{
+input{
 width:100%;
 padding:10px;
 margin-top:10px;
@@ -46,7 +41,6 @@ font-weight:bold;
 border-radius:6px;
 cursor:pointer;
 }
-
 </style>
 
 </head>
@@ -55,73 +49,45 @@ cursor:pointer;
 
 <div class="container">
 
-<h1>Bremcon</h1>
+<h2>Bremcon</h2>
 
-<label>Cliente</label>
-<input id="cliente">
+<input id="cliente" placeholder="Cliente">
+<input id="valor" placeholder="Valor">
 
-<label>Produto (pontos)</label>
-<select id="pontos">
-<option value="75000">75.000</option>
-<option value="150000">150.000</option>
-<option value="300000">300.000</option>
-<option value="450000">450.000</option>
-<option value="600000">600.000</option>
-<option value="750000">750.000</option>
-<option value="1000000">1.000.000</option>
-</select>
-
-<label>Valor do produto</label>
-<input id="valor" type="number">
-
-<label>Parcelas</label>
-<input id="parcelas" type="number">
-
-<button onclick="salvarVenda()">Salvar venda</button>
+<button onclick="salvar()">Salvar</button>
 
 </div>
 
 <script>
 
-const url = "https://jvkiockkrrferjaxmumc.supabase.co"
-const key = "sb_publishable_LlOTC_ImzcH5KI2EZONo5A_IH1M2DSZ"
+const supabaseClient = supabase.createClient(
+"https://jvkiockkrrferjaxmumc.supabase.co",
+"sb_publishable_LlOTC_ImzcH5KI2EZONo5A_IH1M2DSZ"
+)
 
-const supabase = window.supabase.createClient(url, key)
-
-async function salvarVenda(){
+async function salvar(){
 
 let cliente = document.getElementById("cliente").value
-let pontos = document.getElementById("pontos").value
-let valor = Number(document.getElementById("valor").value)
-let parcelas = Number(document.getElementById("parcelas").value)
+let valor = document.getElementById("valor").value
 
-if(!cliente || !valor || !parcelas){
-alert("Preencha todos os campos")
-return
-}
-
-let percentual = 1.4
-let comissao = (valor * percentual) / 100
-
-const { error } = await supabase
+const { error } = await supabaseClient
 .from("vendas")
 .insert([
 {
 cliente: cliente,
-produto_pontos: pontos,
-valor_produto: valor,
-percentual_comissao: percentual,
-valor_comissao_total: comissao,
-parcelas: parcelas,
-pagamento_confirmado: false
+valor_produto: valor
 }
 ])
 
 if(error){
+
 console.log(error)
-alert("Erro ao salvar venda")
+alert("Erro")
+
 }else{
-alert("Venda salva com sucesso")
+
+alert("Salvo no banco!")
+
 }
 
 }
