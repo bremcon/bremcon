@@ -2,55 +2,57 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Sistema de Vendas</title>
+<title>Bremcon - Sistema de Comissões</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
+
 body{
-    font-family: Arial;
-    background:#000;
-    color:#fff;
-    padding:30px;
+font-family:Arial;
+background:#0a0a0a;
+color:white;
+padding:40px;
 }
 
 .container{
-    max-width:500px;
-    margin:auto;
+max-width:600px;
+margin:auto;
+background:#111;
+padding:30px;
+border-radius:10px;
 }
 
-input, select, button{
-    width:100%;
-    padding:10px;
-    margin-top:10px;
-    border:none;
-    border-radius:5px;
+h1{
+text-align:center;
+margin-bottom:30px;
 }
 
-input, select{
-    background:#111;
-    color:#0f0;
+input,select{
+width:100%;
+padding:10px;
+margin-top:10px;
+margin-bottom:20px;
+border:none;
+border-radius:6px;
 }
 
 button{
-    background:#0f0;
-    color:#000;
-    font-weight:bold;
-    cursor:pointer;
+background:#00c853;
+border:none;
+padding:14px;
+width:100%;
+color:white;
+font-weight:bold;
+border-radius:6px;
+cursor:pointer;
+font-size:16px;
 }
 
 button:hover{
-    opacity:0.8;
+background:#00a843;
 }
 
-.vendas{
-    margin-top:30px;
-}
-
-.venda{
-    background:#111;
-    padding:10px;
-    margin-top:10px;
-    border-left:5px solid #0f0;
-}
 </style>
 </head>
 
@@ -58,45 +60,50 @@ button:hover{
 
 <div class="container">
 
-<h2>Registrar Venda</h2>
+<h1>Bremcon - Registrar Venda</h1>
 
-<input type="text" id="cliente" placeholder="Cliente">
+<label>Cliente</label>
+<input id="cliente">
 
-<input type="text" id="produto" placeholder="Produto">
-
-<input type="number" id="valor" placeholder="Valor do produto">
-
-<select id="parcelas">
-<option value="1">1x</option>
-<option value="2">2x</option>
-<option value="3">3x</option>
-<option value="4">4x</option>
-<option value="5">5x</option>
-<option value="6">6x</option>
-<option value="7">7x</option>
-<option value="8">8x</option>
-<option value="9">9x</option>
-<option value="10">10x</option>
-<option value="11">11x</option>
-<option value="12">12x</option>
+<label>Produto (pontos)</label>
+<select id="pontos">
+<option value="75000">75.000</option>
+<option value="150000">150.000</option>
+<option value="300000">300.000</option>
+<option value="450000">450.000</option>
+<option value="600000">600.000</option>
+<option value="750000">750.000</option>
+<option value="1000000">1.000.000</option>
 </select>
 
-<button onclick="salvarVenda()">Salvar venda</button>
+<label>Valor do produto (R$)</label>
+<input id="valor" type="number">
 
-<div class="vendas" id="listaVendas"></div>
+<label>Parcelas</label>
+<input id="parcelas" type="number">
+
+<button onclick="salvarVenda()">Salvar venda</button>
 
 </div>
 
 <script>
 
-async function salvarVenda(){
+const supabase = window.supabase.createClient(
+'https://jvkiockkrrferjaxmumc.supabase.co',
+'sb_publishable_LlOTC_ImzcH5KI2EZONo5A_IH1M2DSZ'
+)
 
-alert("botão funcionando")
+async function salvarVenda(){
 
 let cliente = document.getElementById("cliente").value
 let pontos = document.getElementById("pontos").value
 let valor = parseFloat(document.getElementById("valor").value)
 let parcelas = parseInt(document.getElementById("parcelas").value)
+
+if(!cliente || !valor || !parcelas){
+alert("Preencha todos os campos")
+return
+}
 
 let percentual = 1.4
 
@@ -125,37 +132,11 @@ alert("Erro ao salvar venda")
 
 alert("Venda salva com sucesso")
 
-}
+document.getElementById("cliente").value=""
+document.getElementById("valor").value=""
+document.getElementById("parcelas").value=""
 
 }
-
-let cliente = document.getElementById("cliente").value
-let produto = document.getElementById("produto").value
-let valor = document.getElementById("valor").value
-let parcelas = document.getElementById("parcelas").value
-
-if(cliente === "" || produto === "" || valor === ""){
-alert("Preencha todos os campos")
-return
-}
-
-let lista = document.getElementById("listaVendas")
-
-let venda = document.createElement("div")
-venda.className = "venda"
-
-venda.innerHTML = `
-<strong>Cliente:</strong> ${cliente} <br>
-<strong>Produto:</strong> ${produto} <br>
-<strong>Valor:</strong> R$ ${valor} <br>
-<strong>Parcelas:</strong> ${parcelas}x
-`
-
-lista.appendChild(venda)
-
-document.getElementById("cliente").value = ""
-document.getElementById("produto").value = ""
-document.getElementById("valor").value = ""
 
 }
 
