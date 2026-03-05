@@ -1,11 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-
 <meta charset="UTF-8">
-<title>Bremcon - Comissões</title>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<title>Bremcon</title>
 
 <style>
 body{
@@ -16,14 +13,14 @@ padding:40px;
 }
 
 .container{
-max-width:600px;
+max-width:500px;
 margin:auto;
 background:#111;
 padding:30px;
 border-radius:10px;
 }
 
-input,select{
+input{
 width:100%;
 padding:10px;
 margin-top:10px;
@@ -43,11 +40,7 @@ border-radius:6px;
 cursor:pointer;
 }
 
-h1{
-text-align:center;
-}
 </style>
-
 </head>
 
 <body>
@@ -59,64 +52,21 @@ text-align:center;
 <label>Cliente</label>
 <input id="cliente">
 
-<label>Produto (pontos)</label>
-<select id="pontos">
-<option value="75000">75000</option>
-<option value="150000">150000</option>
-<option value="300000">300000</option>
-<option value="450000">450000</option>
-<option value="600000">600000</option>
-<option value="750000">750000</option>
-<option value="1000000">1000000</option>
-</select>
-
 <label>Valor do produto</label>
 <input id="valor">
 
-<label>Parcelas</label>
-<input id="parcelas">
-
-<button onclick="salvarVenda()">Salvar venda</button>
+<button onclick="salvar()">Salvar venda</button>
 
 </div>
 
 <script>
 
-const supabase = window.supabase.createClient(
-'https://jvkiockkrrferjaxmumc.supabase.co',
-'sb_publishable_LlOTC_ImzcH5KI2EZONo5A_IH1M2DSZ'
-)
-
-async function salvarVenda(){
+function salvar(){
 
 let cliente = document.getElementById("cliente").value
-let pontos = document.getElementById("pontos").value
 let valor = document.getElementById("valor").value
-let parcelas = document.getElementById("parcelas").value
 
-let percentual = 1.4
-let comissao = (valor * percentual) / 100
-
-const { data, error } = await supabase
-.from('vendas')
-.insert([
-{
-cliente: cliente,
-produto_pontos: pontos,
-valor_produto: valor,
-percentual_comissao: percentual,
-valor_comissao_total: comissao,
-parcelas: parcelas,
-pagamento_confirmado: false
-}
-])
-
-if(error){
-alert("Erro ao salvar venda")
-console.log(error)
-}else{
-alert("Venda salva com sucesso")
-}
+alert("Venda registrada\nCliente: " + cliente + "\nValor: " + valor)
 
 }
 
