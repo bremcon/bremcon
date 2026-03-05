@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+
 <meta charset="UTF-8">
 <title>Bremcon - Comissões</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-
 body{
-font-family: Arial;
+font-family:Arial;
 background:#0a0a0a;
 color:white;
 padding:40px;
@@ -23,7 +23,7 @@ padding:30px;
 border-radius:10px;
 }
 
-input, select{
+input,select{
 width:100%;
 padding:10px;
 margin-top:10px;
@@ -46,8 +46,8 @@ cursor:pointer;
 h1{
 text-align:center;
 }
-
 </style>
+
 </head>
 
 <body>
@@ -57,7 +57,7 @@ text-align:center;
 <h1>Bremcon</h1>
 
 <label>Cliente</label>
-<input id="cliente" placeholder="Nome do cliente">
+<input id="cliente">
 
 <label>Produto (pontos)</label>
 <select id="pontos">
@@ -71,10 +71,10 @@ text-align:center;
 </select>
 
 <label>Valor do produto</label>
-<input id="valor" type="number" placeholder="Ex: 30000">
+<input id="valor">
 
 <label>Parcelas</label>
-<input id="parcelas" type="number" placeholder="Ex: 12">
+<input id="parcelas">
 
 <button onclick="salvarVenda()">Salvar venda</button>
 
@@ -83,22 +83,22 @@ text-align:center;
 <script>
 
 const supabase = window.supabase.createClient(
-"https://jvkiockkrrferjaxmumc.supabase.co",
-"sb_publishable_LlOTC_ImzcH5KI2EZONo5A_IH1M2DSZ"
+'https://jvkiockkrrferjaxmumc.supabase.co',
+'sb_publishable_LlOTC_ImzcH5KI2EZONo5A_IH1M2DSZ'
 )
 
 async function salvarVenda(){
 
 let cliente = document.getElementById("cliente").value
 let pontos = document.getElementById("pontos").value
-let valor = parseFloat(document.getElementById("valor").value)
+let valor = document.getElementById("valor").value
 let parcelas = document.getElementById("parcelas").value
 
 let percentual = 1.4
 let comissao = (valor * percentual) / 100
 
-const { error } = await supabase
-.from("vendas")
+const { data, error } = await supabase
+.from('vendas')
 .insert([
 {
 cliente: cliente,
@@ -112,14 +112,10 @@ pagamento_confirmado: false
 ])
 
 if(error){
-
 alert("Erro ao salvar venda")
 console.log(error)
-
 }else{
-
-alert("Venda salva com sucesso!")
-
+alert("Venda salva com sucesso")
 }
 
 }
